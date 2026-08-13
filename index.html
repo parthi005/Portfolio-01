@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parthiban S | Electrical & Electronics Engineer</title>
+    <meta name="description" content="Portfolio of Parthiban S, EEE Student focusing on Power Systems and Automation.">
+    
+    <!-- Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
+
+        :root {
+            --bg-dark: #0a0f1a;
+            --electric-blue: #007aff;
+            --voltage-amber: #ffcc00;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0f1a; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--electric-blue); }
+
+        /* Circuit Trace Animation */
+        .circuit-line {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: dash 5s linear infinite;
+        }
+        @keyframes dash {
+            to { stroke-dashoffset: 0; }
+        }
+
+        .glass {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glow-blue { box-shadow: 0 0 20px rgba(0, 122, 255, 0.2); }
+        
+        #hero-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .nav-link {
+            position: relative;
+            transition: color 0.3s;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--electric-blue);
+            transition: width 0.3s;
+        }
+        .nav-link:hover::after { width: 100%; }
+
+        /* Power Flow Animation */
+        .energy-flow {
+            offset-path: path('M0,50 L200,50');
+            animation: flow 2s linear infinite;
+        }
+        @keyframes flow {
+            0% { offset-distance: 0%; opacity: 0; }
+            50% { opacity: 1; }
+            100% { offset-distance: 100%; opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sticky Navigation -->
+    <nav class="fixed w-full z-50 glass py-4 px-6 md:px-12 flex justify-between items-center border-b border-white/5">
+        <div class="text-xl font-bold tracking-tighter flex items-center gap-2">
+            <span class="text-blue-500"><i data-lucide="zap"></i></span>
+            PARTHIBAN S
+        </div>
+        <div class="hidden md:flex space-x-8 font-mono text-xs tracking-widest uppercase">
+            <a href="#home" class="nav-link">Home</a>
+            <a href="#about" class="nav-link">About</a>
+            <a href="#engineering" class="nav-link">Engineering</a>
+            <a href="#skills" class="nav-link">Skills</a>
+            <a href="#projects" class="nav-link">Projects</a>
+            <a href="#contact" class="nav-link text-blue-400 font-bold">Connect</a>
+        </div>
+        <div class="md:hidden"><i data-lucide="menu"></i></div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative h-screen flex items-center px-6 md:px-24 overflow-hidden">
+        <canvas id="hero-canvas"></canvas>
+        
+        <div class="z-10 max-w-4xl">
+            <div class="inline-block px-3 py-1 mb-6 border border-blue-500/30 rounded-full bg-blue-500/10 text-blue-400 font-mono text-xs tracking-tighter">
+                ELECTRICAL & ELECTRONICS ENGINEERING
+            </div>
+            <h1 class="text-6xl md:text-8xl font-extrabold text-white leading-none mb-4">
+                PARTHIBAN S
+            </h1>
+            <p class="text-xl md:text-2xl text-slate-400 font-light mb-8 max-w-2xl leading-relaxed">
+                Engineering the future of <span class="text-white font-semibold">electrical power</span> and <span class="text-blue-500 font-semibold">intelligent energy systems</span>.
+            </p>
+            <div class="flex flex-wrap gap-4">
+                <a href="#projects" class="bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-lg font-bold transition-all transform hover:-translate-y-1 flex items-center gap-2">
+                    Explore Projects <i data-lucide="arrow-right" size="18"></i>
+                </a>
+                <a href="/assets/Parthiban_S_Resume.pdf" class="border border-slate-700 hover:border-blue-500 px-8 py-4 rounded-lg font-bold transition-all flex items-center gap-2">
+                    <i data-lucide="download" size="18"></i> Resume
+                </a>
+            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce text-slate-500">
+            <i data-lucide="mouse"></i>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 px-6 md:px-24 bg-[#0d131f]">
+        <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+            <div class="relative">
+                <div class="w-64 h-64 md:w-80 md:h-80 rounded-2xl border-2 border-blue-500/20 relative z-10 overflow-hidden glow-blue">
+                    <img src="/assets/profile.jpg" alt="Parthiban S" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700">
+                </div>
+                <div class="absolute -bottom-6 -right-6 w-full h-full border-2 border-dashed border-slate-800 rounded-2xl -z-0"></div>
+            </div>
+            
+            <div>
+                <h2 class="text-3xl font-bold mb-6 flex items-center gap-3">
+                    <span class="text-blue-500">01.</span> About Me
+                </h2>
+                <p class="text-slate-400 text-lg leading-relaxed mb-6">
+                    I am a B.E. Electrical and Electronics Engineering student at <span class="text-white font-semibold">V.S.B. College of Engineering Technical Campus</span> (Graduation 2027). 
+                </p>
+                <p class="text-slate-400 text-lg leading-relaxed mb-8">
+                    My academic focus lies at the intersection of power distribution and industrial intelligence. I am passionate about how modern switchgear and automation can optimize the global energy transition.
+                </p>
+                
+                <div class="grid grid-cols-2 gap-6 font-mono text-sm">
+                    <div>
+                        <p class="text-blue-500 mb-1 uppercase tracking-tighter">Current CGPA</p>
+                        <p class="text-xl font-bold text-white">7.94 / 10</p>
+                    </div>
+                    <div>
+                        <p class="text-blue-500 mb-1 uppercase tracking-tighter">Location</p>
+                        <p class="text-xl font-bold text-white">Tamil Nadu, India</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Power Grid (Signature Feature) -->
+    <section class="py-24 px-6 bg-slate-950 border-y border-white/5">
+        <div class="max-w-6xl mx-auto text-center mb-16">
+            <h2 class="text-4xl font-bold mb-4">Single Line Diagram</h2>
+            <p class="text-slate-500">Interactive visualization of the power flow from Generation to Consumer.</p>
+        </div>
+
+        <div class="max-w-5xl mx-auto relative px-4 flex flex-col md:flex-row justify-between items-center gap-8">
+            <!-- Diagram Item -->
+            <div class="flex flex-col items-center group cursor-help">
+                <div class="w-20 h-20 rounded-full glass flex items-center justify-center mb-4 group-hover:border-blue-500 transition-all">
+                    <i data-lucide="factory" class="text-blue-400"></i>
+                </div>
+                <span class="text-xs font-mono font-bold uppercase tracking-widest text-slate-400">Generation</span>
+                <div class="opacity-0 group-hover:opacity-100 absolute -top-12 bg-blue-600 text-[10px] px-2 py-1 rounded transition-all">Solar / Hydro Sources</div>
+            </div>
+
+            <div class="w-1 h-12 md:w-24 md:h-1 bg-slate-800 relative">
+                <div class="absolute top-0 left-0 w-full h-full bg-blue-500 energy-flow"></div>
+            </div>
+
+            <!-- Diagram Item -->
+            <div class="flex flex-col items-center group cursor-help">
+                <div class="w-20 h-20 rounded-full glass flex items-center justify-center mb-4 group-hover:border-blue-500 transition-all">
+                    <i data-lucide="layers" class="text-blue-400"></i>
+                </div>
+                <span class="text-xs font-mono font-bold uppercase tracking-widest text-slate-400">Step-Up Trans.</span>
+            </div>
+
+            <div class="w-1 h-12 md:w-24 md:h-1 bg-slate-800 relative"></div>
+
+            <!-- Diagram Item -->
+            <div class="flex flex-col items-center group cursor-help">
+                <div class="w-20 h-20 rounded-full glass flex items-center justify-center mb-4 group-hover:border-blue-500 transition-all">
+                    <i data-lucide="tower-control" class="text-blue-400"></i>
+                </div>
+                <span class="text-xs font-mono font-bold uppercase tracking-widest text-slate-400">Substation</span>
+            </div>
+
+            <div class="w-1 h-12 md:w-24 md:h-1 bg-slate-800 relative"></div>
+
+            <!-- Diagram Item -->
+            <div class="flex flex-col items-center group cursor-help">
+                <div class="w-20 h-20 rounded-full glass flex items-center justify-center mb-4 group-hover:border-blue-500 transition-all">
+                    <i data-lucide="home" class="text-blue-400"></i>
+                </div>
+                <span class="text-xs font-mono font-bold uppercase tracking-widest text-slate-400">Consumer</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Engineering Interests -->
+    <section id="engineering" class="py-24 px-6 md:px-24">
+        <h2 class="text-3xl font-bold mb-16 text-center">Engineering Focus</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            
+            <div class="glass p-8 rounded-2xl hover:border-blue-500/50 transition-all">
+                <i data-lucide="zap" class="text-amber-400 mb-6"></i>
+                <h3 class="text-xl font-bold mb-4">Power Systems</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">Operation and analysis of generation, transmission, and distribution networks.</p>
+            </div>
+
+            <div class="glass p-8 rounded-2xl hover:border-blue-500/50 transition-all">
+                <i data-lucide="shield-check" class="text-blue-400 mb-6"></i>
+                <h3 class="text-xl font-bold mb-4">Protection & Control</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">Understanding protective relays, circuit breakers, and fault coordination.</p>
+            </div>
+
+            <div class="glass p-8 rounded-2xl hover:border-blue-500/50 transition-all">
+                <i data-lucide="cpu" class="text-green-400 mb-6"></i>
+                <h3 class="text-xl font-bold mb-4">Industrial Automation</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">PLC programming, SCADA systems, and HMI design for smart factories.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-24 px-6 md:px-24 bg-[#0d131f]">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-3xl font-bold mb-16">Technical Skills</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <!-- Core Electrical -->
+                <div class="space-y-6">
+                    <h3 class="text-xs font-mono uppercase tracking-[0.3em] text-blue-500">Core Electrical</h3>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="px-4 py-2 bg-slate-800 rounded-md border border-slate-700 text-sm">Power Systems</span>
+                        <span class="px-4 py-2 bg-slate-800 rounded-md border border-slate-700 text-sm">Electrical Machines</span>
+                        <span class="px-4 py-2 bg-slate-800 rounded-md border border-slate-700 text-sm">Switchgear</span>
+                        <span class="px-4 py-2 bg-slate-800 rounded-md border border-slate-700 text-sm">Power Electronics</span>
+                    </div>
+                </div>
+
+                <!-- Software -->
+                <div class="space-y-6">
+                    <h3 class="text-xs font-mono uppercase tracking-[0.3em] text-blue-500">Engineering Software</h3>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="px-4 py-2 bg-slate-800 rounded-md border border-slate-700 text-sm">MATLAB</span>
+                        <span class="px-4 py-2 bg-slate-800 rounded-md border border-slate-700 text-sm">AutoCAD Electrical</span>
+                        <span class="px-4 py-2 bg-slate-800 rounded-md border border-slate-700 text-sm">PLC (TIA Portal)</span>
+                        <span class="px-4 py-2 bg-slate-800 rounded-md border border-slate-700 text-sm">ETAP</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience -->
+    <section class="py-24 px-6 md:px-24">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold mb-16 flex items-center gap-3">
+                <span class="text-blue-500">02.</span> Experience
+            </h2>
+            
+            <div class="relative pl-8 border-l border-slate-800 space-y-12">
+                <div class="relative">
+                    <div class="absolute -left-[41px] top-0 w-5 h-5 rounded-full bg-blue-600 border-4 border-slate-950"></div>
+                    <p class="text-xs font-mono text-blue-400 mb-2">INTERNSHIP</p>
+                    <h3 class="text-xl font-bold">VVDN Technologies</h3>
+                    <p class="text-slate-400 italic mb-4">Laptop Assembly & Production</p>
+                    <ul class="text-slate-500 space-y-2 text-sm list-disc pl-4">
+                        <li>Exposure to industrial-scale electronic assembly and quality control.</li>
+                        <li>Gained practical insight into hardware manufacturing and process automation.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 px-6 md:px-24 bg-slate-950">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-5xl font-bold mb-8">Let's Connect</h2>
+            <p class="text-slate-400 text-lg mb-12">I am currently looking for internship opportunities in Power Systems, Renewable Energy, and Industrial Automation.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-left mb-12">
+                <a href="mailto:sparthiban.wrk@gmail.com" class="glass p-6 rounded-xl flex items-center gap-4 hover:border-blue-500 transition-all">
+                    <i data-lucide="mail" class="text-blue-400"></i>
+                    <div>
+                        <p class="text-xs text-slate-500 font-mono">EMAIL</p>
+                        <p class="font-bold">sparthiban.wrk@gmail.com</p>
+                    </div>
+                </a>
+                <a href="https://www.linkedin.com/in/parthi005/" target="_blank" class="glass p-6 rounded-xl flex items-center gap-4 hover:border-blue-500 transition-all">
+                    <i data-lucide="linkedin" class="text-blue-400"></i>
+                    <div>
+                        <p class="text-xs text-slate-500 font-mono">LINKEDIN</p>
+                        <p class="font-bold">in/parthi005</p>
+                    </div>
+                </a>
+            </div>
+
+            <p class="text-slate-600 font-mono text-sm uppercase tracking-widest">© 2026 Parthiban S • Engineered for the Future</p>
+        </div>
+    </section>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // --- Three.js Hero Visualization ---
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('hero-canvas'), alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        // Create a technical "Grid" background
+        const geometry = new THREE.BufferGeometry();
+        const vertices = [];
+        const size = 2000;
+        const count = 1500;
+
+        for (let i = 0; i < count; i++) {
+            vertices.push(
+                THREE.MathUtils.randFloatSpread(size),
+                THREE.MathUtils.randFloatSpread(size),
+                THREE.MathUtils.randFloatSpread(size)
+            );
+        }
+
+        geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+        const material = new THREE.PointsMaterial({ color: 0x007aff, size: 2, transparent: true, opacity: 0.5 });
+        const points = new THREE.Points(geometry, material);
+        scene.add(points);
+
+        camera.position.z = 500;
+
+        function animate() {
+            requestAnimationFrame(animate);
+            points.rotation.y += 0.001;
+            points.rotation.x += 0.0005;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Handle Resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // --- GSAP Animations ---
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Entrance animations
+        gsap.from("#home h1", { opacity: 0, y: 50, duration: 1, delay: 0.5 });
+        gsap.from("#home p", { opacity: 0, y: 30, duration: 1, delay: 0.8 });
+        
+        // Scroll triggered animations for sections
+        gsap.utils.toArray('section').forEach(section => {
+            gsap.from(section, {
+                scrollTrigger: {
+                    trigger: section,
+                    start: "top 80%",
+                },
+                opacity: 0,
+                y: 50,
+                duration: 1
+            });
+        });
+    </script>
+</body>
+</html>
